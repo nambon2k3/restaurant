@@ -158,6 +158,31 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return preOrders;
     }
+    
+    public List<PreOrder> getAllPreOrders(int userId) {
+        List<PreOrder> preOrders = new ArrayList<>();
+        String query = "SELECT * FROM preordertable where userid = ?";
+        try (PreparedStatement statement = cnn.prepareStatement(query);
+             ) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                PreOrder preOrder = new PreOrder();
+                preOrder.setPreOrderID(resultSet.getInt("PreOrderID"));
+                preOrder.setTableID(resultSet.getInt("TableID"));
+                preOrder.setName(resultSet.getString("Name"));
+                preOrder.setPhone(resultSet.getString("Phone"));
+                preOrder.setBookDate(resultSet.getDate("Book_date"));
+                preOrder.setNumberOfPeople(resultSet.getInt("NumberOfPeople"));
+                preOrder.setTime(resultSet.getTime("Time"));
+                preOrder.setStatus(resultSet.getString("Status"));
+                preOrders.add(preOrder);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return preOrders;
+    }
 
      
 

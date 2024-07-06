@@ -27,20 +27,20 @@ import Utils.Config;
  *
  * @author Admin
  */
-@WebServlet(name = "PaymentController", urlPatterns = {"/public/payment"})
+@WebServlet(name = "PaymentController", urlPatterns = {"/payment"})
 public class PaymentController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse respone) throws ServletException, IOException {
+        request.setAttribute("amount", Config.amount);
+        request.setAttribute("preOrderID", request.getParameter("preOrderID"));
+        request.getRequestDispatcher("VNPAY.jsp").forward(request, respone);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse respone) throws ServletException, IOException {
 
-        String amount_raw = request.getParameter("amount"); 
-        double amount_d = Double.parseDouble(amount_raw);
-        int amount = (int) amount_d * 100 * 25000;
+        
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_OrderInfo = "pay pay";
@@ -52,7 +52,7 @@ public class PaymentController extends HttpServlet {
         vnp_Params.put("vnp_Version", vnp_Version); //Phiên bản cũ là 2.0.0, 2.0.1 thay đổi sang 2.1.0
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_Amount", String.valueOf(Config.amount*100));
         vnp_Params.put("vnp_CurrCode", "VND");
         String bank_code = request.getParameter("bankcode");
         if (bank_code != null && !bank_code.isEmpty()) {
@@ -110,7 +110,7 @@ public class PaymentController extends HttpServlet {
         //Section : Add new payment
         //Get user payment
         
-
+        Config.orderID = Integer.parseInt(request.getParameter("preOrderID"));
         respone.sendRedirect(paymentUrl);
 
     }

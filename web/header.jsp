@@ -50,6 +50,7 @@
                     <div class="collapse navbar-collapse" id="ftco-nav">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item cta"><a href="reservation.jsp" class="nav-link">Book a table</a></li>
+                            <li class="nav-item cta" style="margin-left: 5px"><a href="my-order" class="nav-link">My Order</a></li>
                             <li class="nav-item cta" style="margin-left: 5px"><a href="logout" class="nav-link">Logout</a></li>
                             <li class="nav-item cta" style="margin-left: 5px"><a href="http://localhost:9999/ISP392-3/changePasswordControllers" class="nav-link">Change Password</a></li>
                             <li class="nav-item cta" style="margin-left: 5px"><a href="http://localhost:9999/ISP392-3/profile" class="nav-link">Profile</a></li>
