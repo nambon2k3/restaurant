@@ -13,6 +13,7 @@ public class PreOrder {
     private int numberOfPeople;
     private Date time;
     private String status;
+    private int userId;
 
     // Constructors
     public PreOrder() {
@@ -39,6 +40,14 @@ public class PreOrder {
         this.status = status;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+    
     public int getPreOrderID() {
         return preOrderID;
     }

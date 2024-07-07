@@ -102,7 +102,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
             preparedStatement.setInt(1, preOrderID);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                return new PreOrder(
+                PreOrder preOrder = new PreOrder(
                     rs.getInt("PreOrderID"),
                     rs.getInt("TableID"),
                     rs.getString("Name"),
@@ -112,6 +112,9 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
                     rs.getTime("Time"),
                     rs.getString("Status")
                 );
+                preOrder.setUserId(rs.getInt("userid"));
+                
+                return preOrder;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -151,6 +154,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
                 preOrder.setNumberOfPeople(resultSet.getInt("NumberOfPeople"));
                 preOrder.setTime(resultSet.getTime("Time"));
                 preOrder.setStatus(resultSet.getString("Status"));
+                preOrder.setUserId(resultSet.getInt("userid"));
                 preOrders.add(preOrder);
             }
         } catch (SQLException ex) {
@@ -176,6 +180,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
                 preOrder.setNumberOfPeople(resultSet.getInt("NumberOfPeople"));
                 preOrder.setTime(resultSet.getTime("Time"));
                 preOrder.setStatus(resultSet.getString("Status"));
+                preOrder.setUserId(resultSet.getInt("userid"));
                 preOrders.add(preOrder);
             }
         } catch (SQLException ex) {
@@ -188,7 +193,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
 
     // Create a new pre-order and return the generated ID
     public int createPreOrder(PreOrder preOrder) {
-        String query = "INSERT INTO preordertable (Name, Phone, Book_date, Time, NumberOfPeople, Status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO preordertable (Name, Phone, Book_date, Time, NumberOfPeople, Status, userid) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = cnn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, preOrder.getName());
             statement.setString(2, preOrder.getPhone());
@@ -196,6 +201,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
             statement.setTime(4, new java.sql.Time(preOrder.getTime().getTime()));
             statement.setInt(5, preOrder.getNumberOfPeople());
             statement.setString(6, preOrder.getStatus());
+            statement.setInt(7, preOrder.getUserId());
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows > 0) {
@@ -209,6 +215,31 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
             System.out.println("Error creating new pre-order: " + e.getMessage());
         }
         return -1;
+    }
+    
+    public List<PreOrder> getAllPreOrdersByUserId(int userId) {
+        List<PreOrder> preOrders = new ArrayList<>();
+        String query = "SELECT * FROM preordertable WHERE userid = ?";
+        try (PreparedStatement statement = cnn.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                PreOrder preOrder = new PreOrder();
+                preOrder.setPreOrderID(resultSet.getInt("PreOrderID"));
+                preOrder.setTableID(resultSet.getInt("TableID"));
+                preOrder.setName(resultSet.getString("Name"));
+                preOrder.setPhone(resultSet.getString("Phone"));
+                preOrder.setBookDate(resultSet.getDate("Book_date"));
+                preOrder.setNumberOfPeople(resultSet.getInt("NumberOfPeople"));
+                preOrder.setTime(resultSet.getTime("Time"));
+                preOrder.setStatus(resultSet.getString("Status"));
+                preOrder.setUserId(resultSet.getInt("userid"));
+                preOrders.add(preOrder);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return preOrders;
     }
 
     
