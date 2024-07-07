@@ -94,6 +94,18 @@
 
         <div class="untree_co-section before-footer-section">
             <div class="container">
+
+                <c:if test="${param.success ne null}">
+                    <div class="alert alert-success" role="alert">
+                        Success!
+                    </div>
+                </c:if>
+                <c:if test="${param.fail ne null}">
+                    <div class="alert alert-danger" role="alert">
+                        Failed!
+                    </div>
+                </c:if>
+
                 <div class="row mb-5">
                     <form class="col-md-12" action="cart" method="post">
                         <div class="site-blocks-table">
@@ -159,7 +171,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="numberOfPeople">Number of People</label>
-                                    <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" placeholder="Enter number of people" required>
+                                    <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" placeholder="Enter number of people"  required min="1" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>

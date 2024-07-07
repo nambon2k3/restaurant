@@ -72,7 +72,7 @@ public class PreOrderDAO extends DBConnect {
     // Update an existing pre-order
     public void updatePreOrder(PreOrder preOrder) {
         String query = "UPDATE `preordertable` SET `Name`=?, `Phone`=?, `Book_date`=?, `Time`=?, `NumberOfPeople`=? WHERE `PreOrderID`=?";
-try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
             preparedStatement.setString(1, preOrder.getName());
             preparedStatement.setString(2, preOrder.getPhone());
             preparedStatement.setDate(3, new java.sql.Date(preOrder.getBookDate().getTime()));
@@ -103,17 +103,17 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 PreOrder preOrder = new PreOrder(
-                    rs.getInt("PreOrderID"),
-                    rs.getInt("TableID"),
-                    rs.getString("Name"),
-                    rs.getString("Phone"),
-                    rs.getDate("Book_date"),
-                    rs.getInt("NumberOfPeople"),
-                    rs.getTime("Time"),
-                    rs.getString("Status")
+                        rs.getInt("PreOrderID"),
+                        rs.getInt("TableID"),
+                        rs.getString("Name"),
+                        rs.getString("Phone"),
+                        rs.getDate("Book_date"),
+                        rs.getInt("NumberOfPeople"),
+                        rs.getTime("Time"),
+                        rs.getString("Status")
                 );
                 preOrder.setUserId(rs.getInt("userid"));
-                
+
                 return preOrder;
             }
         } catch (SQLException ex) {
@@ -121,7 +121,6 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return null;
     }
-
 
     // Update the status of a pre-order
     public boolean updateStatusPreOrder(int preOrderID, String status) {
@@ -142,8 +141,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
     public List<PreOrder> getAllPreOrders() {
         List<PreOrder> preOrders = new ArrayList<>();
         String query = "SELECT * FROM preordertable";
-        try (PreparedStatement statement = cnn.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = cnn.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 PreOrder preOrder = new PreOrder();
                 preOrder.setPreOrderID(resultSet.getInt("PreOrderID"));
@@ -162,12 +160,11 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return preOrders;
     }
-    
+
     public List<PreOrder> getAllPreOrders(int userId) {
         List<PreOrder> preOrders = new ArrayList<>();
         String query = "SELECT * FROM preordertable where userid = ?";
-        try (PreparedStatement statement = cnn.prepareStatement(query);
-             ) {
+        try (PreparedStatement statement = cnn.prepareStatement(query);) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -188,8 +185,6 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return preOrders;
     }
-
-     
 
     // Create a new pre-order and return the generated ID
     public int createPreOrder(PreOrder preOrder) {
@@ -216,7 +211,7 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return -1;
     }
-    
+
     public List<PreOrder> getAllPreOrdersByUserId(int userId) {
         List<PreOrder> preOrders = new ArrayList<>();
         String query = "SELECT * FROM preordertable WHERE userid = ?";
@@ -241,8 +236,5 @@ try (PreparedStatement preparedStatement = cnn.prepareStatement(query)) {
         }
         return preOrders;
     }
-
-    
-    
 
 }

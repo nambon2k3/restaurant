@@ -6,6 +6,7 @@ package Controllers;
 
 import DAL.DishDao;
 import DAL.PreOrderDAO;
+import Model.Account;
 import java.sql.Time;
 import Model.PreOrder;
 import java.io.IOException;
@@ -83,6 +84,8 @@ public class cartControllers extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            
+            Account user = (Account) request.getSession().getAttribute("account");
 
             // Retrieve form parameters
             String name = request.getParameter("name");
@@ -114,6 +117,7 @@ public class cartControllers extends HttpServlet {
             preOrder.setNumberOfPeople(numberOfPeople);
             preOrder.setTime(bookTime);
             preOrder.setStatus("Pending");
+            preOrder.setUserId(Integer.parseInt(user.getAccountID()));
             
             new PreOrderDAO().createPreOrder(preOrder);
 
