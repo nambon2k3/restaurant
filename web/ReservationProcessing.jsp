@@ -91,9 +91,9 @@
                                             <td>
                                                 <a class="btn btn-secondary" href="ReservationManager?action=view&id=${preOrder.preOrderID}">View</a>
                                             </td>
-                                            <td>
+<!--                                            <td>
                                                 <a class="btn btn-secondary" href="ReservationManager?action=view&id=${preOrder.preOrderID}">Delete</a>
-                                            </td>
+                                            </td>-->
                                         </tr>
                                     </c:forEach>
                                 </tbody>

@@ -5,6 +5,7 @@
 package Controllers;
 
 import DAL.AccountDAO;
+import DAL.UserDao;
 import Model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -80,6 +81,7 @@ public class loginControllers extends HttpServlet {
         if (acc != null) {
             // Authentication successful
             request.getSession().setAttribute("account", acc);
+            request.getSession().setAttribute("user", new UserDao().getUserById(Integer.parseInt(acc.getAccountID())));
             response.sendRedirect("Home.jsp");
         } else {
             // Authentication failed

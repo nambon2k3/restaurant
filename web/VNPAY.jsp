@@ -105,11 +105,11 @@
             <div class="table-responsive">
                 <form action="payment" id="frmCreateOrder" method="post">   
                     <input type="hidden" name="preOrderID" value="${preOrderID}">
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label for="Amount">Amount</label>
                         <input class="form-control" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="Amount" name="amount" type="text" value="${amount}" readonly>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group d-none">
                         <label for="OrderDescription">Order Description:</label>
                         <textarea class="form-control" cols="20" id="OrderDescription" name="OrderDescription" rows="2"></textarea>
                     </div>

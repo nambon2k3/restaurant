@@ -68,41 +68,46 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="name" style="font-weight: bold">Name</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Name" value="${preOrder.name}" name="name" required>
+                                        <input type="text" class="form-control" id="name" placeholder="Name" value="${preOrder.name}" name="name" readonly>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="phone" style="font-weight: bold">Phone</label>
-                                        <input type="text" class="form-control" id="phone" placeholder="Phone" value="${preOrder.phone}" name="phone" required>
+                                        <input type="text" class="form-control" id="phone" placeholder="Phone" value="${preOrder.phone}" name="phone" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="tableID" style="font-weight: bold">Table ID</label>
-                                        <input type="number" class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID" required>
+                                        <input type="number" class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID" readonly>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="bookDate" style="font-weight: bold">Book Date</label>
-                                        <input type="datetime-local" class="form-control" id="bookDate" placeholder="Book Date" value="${preOrder.bookDate}" name="book_date" required>
+                                        <input type="datetime-local" class="form-control" id="bookDate" placeholder="Book Date" value="${preOrder.bookDate}" name="book_date" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="numberOfPeople" style="font-weight: bold">Number of People</label>
-                                        <input type="number" class="form-control" id="numberOfPeople" placeholder="Number of People" value="${preOrder.numberOfPeople}" name="number_of_people" required>
+                                        <input type="number" class="form-control" id="numberOfPeople" placeholder="Number of People" value="${preOrder.numberOfPeople}" name="number_of_people" readonly>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="time" style="font-weight: bold">Time</label>
-                                        <input type="time" class="form-control" id="time" placeholder="Time" value="${preOrder.time}" name="time" required>
+                                        <input type="time" class="form-control" id="time" placeholder="Time" value="${preOrder.time}" name="time" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group ${preOrder.status eq 'Processing' ? '' : 'd-none'}">
                                     <label for="status" style="font-weight: bold">Status</label>
                                     <select class="form-control" id="status" name="status" required>
-                                        <option value="${preOrder.status}">${preOrder.status}</option>
-                                        <option value="New">New</option>
-                                        <option value="Accepted">Accepted</option>
+                                        <option value="Wait for deposit">Accepted</option>
                                         <option value="Rejected">Rejected</option>
                                     </select>                        
+                                </div>
+                                <div class="form-group ${preOrder.status eq 'Processing' ? 'd-none' : ''}">
+                                    <label for="status" style="font-weight: bold">Status</label>
+                                    <input type="text" class="form-control" value="${preOrder.status}" readonly>
+<!--                                    <select class="form-control" id="status" name="status" readonly>
+                                        <option value="x">${preOrder.status}</option>
+                                    </select>                        -->
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-block">Update</button>
                             </form>

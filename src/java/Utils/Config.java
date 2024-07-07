@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class Config {
 
     public static int orderID = 0;
-    public static final int amount = 2000000;
+    public static final int amount = 300000;
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_Returnurl = "http://localhost:8080/ISP392-3/handle";
     public static String vnp_TmnCode = "CGXZLS0Z";

@@ -74,7 +74,9 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-secondary" href="payment?preOrderID=${preOrder.preOrderID}">Pay</a>
+                                                <c:if test="${preOrder.status eq 'Wait for deposit'}">
+                                                    <a class="btn btn-secondary" href="payment?preOrderID=${preOrder.preOrderID}">Deposit</a>
+                                                </c:if>
                                             </td>
                                         </tr>
                                     </c:forEach>

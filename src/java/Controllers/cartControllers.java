@@ -116,7 +116,7 @@ public class cartControllers extends HttpServlet {
             preOrder.setBookDate(bookDate);
             preOrder.setNumberOfPeople(numberOfPeople);
             preOrder.setTime(bookTime);
-            preOrder.setStatus("Pending");
+            preOrder.setStatus("Processing");
             preOrder.setUserId(Integer.parseInt(user.getAccountID()));
             
             new PreOrderDAO().createPreOrder(preOrder);
