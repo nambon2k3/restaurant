@@ -4,7 +4,10 @@
  */
 package Controllers;
 
-import Model.Cart;
+import DAL.DishDao;
+import DAL.PreOrderDAO;
+import java.sql.Time;
+import Model.PreOrder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +16,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -59,6 +64,9 @@ public class cartControllers extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        request.setAttribute("dishes", new DishDao().getAllDishs());
+
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 
@@ -73,34 +81,51 @@ public class cartControllers extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(true);
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new Cart();
-        }
-
-        String action = request.getParameter("action");
-        String numStr = request.getParameter("num");
-        String dishIDStr = request.getParameter("dishID");
 
         try {
-            int dishID = Integer.parseInt(dishIDStr);
-            int num = Integer.parseInt(numStr);
 
-            if ("delete".equals(action)) {
-                cart.removeItem(dishID);
-            } else if ("update".equals(action)) {
-                cart.updateItemQuantity(dishID, num);
-            }
+            // Retrieve form parameters
+            String name = request.getParameter("name");
+            String bookDateStr = request.getParameter("bookDate");
+            String bookTimeStr = request.getParameter("bookTime");
+            String phone = request.getParameter("phone");
+            String numberOfPeopleStr = request.getParameter("numberOfPeople");
+            String email = request.getParameter("email");
 
-            session.setAttribute("cart", cart);
-            session.setAttribute("size", cart.getItems().size());
+            // Date and Time formatters
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing dishID or num: " + e.getMessage());
+            // Parse date and time
+            Date bookDate = null;
+            Time bookTime = null;
+
+            bookDate = dateFormatter.parse(bookDateStr);
+            Date parsedTime = timeFormatter.parse(bookTimeStr);
+            bookTime = new Time(parsedTime.getTime());
+
+            int numberOfPeople = Integer.parseInt(numberOfPeopleStr);
+
+            // Create PreOrder object
+            PreOrder preOrder = new PreOrder();
+            preOrder.setName(name);
+            preOrder.setPhone(phone);
+            preOrder.setBookDate(bookDate);
+            preOrder.setNumberOfPeople(numberOfPeople);
+            preOrder.setTime(bookTime);
+            preOrder.setStatus("Pending");
+            
+            new PreOrderDAO().createPreOrder(preOrder);
+
+            response.sendRedirect("cart?success");
+            
+        } catch (Exception e) {
+
+            System.out.println(e);
+            response.sendRedirect("cart?fail");
+
         }
 
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 
     /**

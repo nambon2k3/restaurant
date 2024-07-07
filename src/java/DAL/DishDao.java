@@ -17,12 +17,12 @@ import java.util.List;
  */
 public class DishDao extends DBConnect {
 
-    public List<dish> getAllDishs() throws SQLException {
-        List<dish> dishs = new ArrayList<>();
+    public List<dish> getAllDishs() {
+        List<dish> dishes = new ArrayList<>();
         String query = "SELECT * FROM dish";
         try (PreparedStatement statement = cnn.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                dishs.add(new dish(
+                dishes.add(new dish(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getInt(3),
@@ -32,8 +32,10 @@ public class DishDao extends DBConnect {
                         resultSet.getInt(7)
                 ));
             }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-        return dishs;
+        return dishes;
     }
 
     public List<dish> getAllDishsBySearch(String search) throws SQLException {

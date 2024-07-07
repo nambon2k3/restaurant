@@ -8,6 +8,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +54,20 @@
         <link rel="stylesheet" href="css/flaticon.css">
         <link rel="stylesheet" href="css/icomoon.css">
         <link rel="stylesheet" href="css/style.css">
+
+        <script>
+            // Function to set min attribute to today's date
+            function setMinDate() {
+                // Get today's date in yyyy-mm-dd format
+                let today = new Date().toISOString().split('T')[0];
+
+                // Set min attribute of bookDate input field
+                document.getElementById('bookDate').min = today;
+            }
+
+            // Call setMinDate function when the page loads
+            window.onload = setMinDate;
+        </script>
     </head>
 
 
@@ -63,8 +80,8 @@
             <div class="container">
                 <div class="row no-gutters slider-text align-items-end justify-content-center">
                     <div class="col-md-9 ftco-animate text-center mb-4">
-                        <h1 class="mb-2 bread">Cart</h1>
-                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Cart <i class="ion-ios-arrow-forward"></i></span></p>
+                        <h1 class="mb-2 bread">Booking</h1>
+                        <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Booking<i class="ion-ios-arrow-forward"></i></span></p>
                     </div>
                 </div>
             </div>
@@ -78,9 +95,9 @@
         <div class="untree_co-section before-footer-section">
             <div class="container">
                 <div class="row mb-5">
-                    <form class="col-md-12" action="" method="post">
+                    <form class="col-md-12" action="cart" method="post">
                         <div class="site-blocks-table">
-                            <table class="table">
+                            <table class="table table-borderless" id="dishTable">
                                 <thead>
                                     <tr>
                                         <th class="product-thumbnail">Image</th>
@@ -88,34 +105,31 @@
                                         <th class="product-price">Price</th>
                                         <th class="product-quantity">Quantity</th>
                                         <th class="product-total">Total</th>
-                                        <th class="product-remove">Remove</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:set var="cart" value="${sessionScope.cart}"/>
-                                    <c:forEach var="item" items="${cart.items}">
+                                    <c:forEach var="item" items="${dishes}">
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <img src="images/${item.dish.image}" alt="Image" class="img-fluid" style="width: 100px; height: auto;">
+                                                <img src="images/${item.image}" alt="Image" class="img-fluid" style="width: 100px; height: auto;">
                                             </td>
                                             <td class="product-name">
-                                                <h2 class="h5 text-black">${item.dish.name}</h2>
+                                                <h2 class="h5 text-black">${item.name}</h2>
                                             </td>
-                                            <td>€${item.price}</td>
+                                            <td id="price_${item.dishID}">€${item.price}</td>
                                             <td>
                                                 <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                                                     <div class="input-group-prepend">
-                                                        <button class="btn btn-outline-black decrease" type="button" onclick="updateCart(${item.dish.dishID}, 'update', -1)">&minus;</button>
+                                                        <button class="btn btn-outline-black decrease" type="button" onclick="updateCart(${item.dishID}, -1)">&minus;</button>
                                                     </div>
-                                                    <input type="text" class="form-control text-center quantity-amount" value="${item.quantity}" placeholder="" aria-label="Quantity" aria-describedby="button-addon1" readonly>
+                                                    <input type="hidden" value="(${item.dishID}" name="dishId">
+                                                    <input type="number" class="form-control text-center quantity-amount" name="quantity" id="quantity_${item.dishID}" value="0" placeholder="" aria-label="Quantity" aria-describedby="button-addon1" readonly>
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-outline-black increase" type="button" onclick="updateCart(${item.dish.dishID}, 'update', 1)">&plus;</button>
+                                                        <button class="btn btn-outline-black increase" type="button" onclick="updateCart(${item.dishID}, 1)">&plus;</button>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>€${item.quantity * item.price}</td>
-                                            <td><button type="button" class="btn btn-primary btn-sm" onclick="updateCart(${item.dish.dishID}, 'delete', 0)">X</button></td>
-                                            <!--                                            <td><a  class="btn btn-primary btn-sm" >X</a></td>-->
+                                            <td id="total_${item.dishID}">0</td>
                                         </tr>
                                     </c:forEach>
 
@@ -124,63 +138,48 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <div class="row mt-5">
+                            <div  class="col-7">
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bookDate">Book Date</label>
+                                    <input type="date" class="form-control" id="bookDate" name="bookDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bookTime">Book Time</label>
+                                    <input type="time" class="form-control" id="bookTime" name="bookTime" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="numberOfPeople">Number of People</label>
+                                    <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" placeholder="Enter number of people" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="btn btn-primary btn-block w-25">Book</button>
+                                </div>
+                            </div>
+
+                            <!--                            <div class="col-md-6">
+                                                            <div class="row mb-5">
+                                                                <div class="col-md-6 mb-3 mb-md-0">
+                                                                    <a class="btn btn-primary btn-block" href="http://localhost:9999/ISP392-3/dishs">Continue Menu</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
+                        </div>
+
                     </form>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row mb-5">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <a class="btn btn-primary btn-block" href="http://localhost:9999/ISP392-3/dishs">Continue Menu</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 pl-5">
-                        <div class="row justify-content-end">
-                            <div class="col-md-7">
-                                <div class="row">
-                                    <div class="col-md-12 text-right border-bottom mb-5">
-                                        <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <span class="text-black">Subtotal</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <strong class="text-black">€${cart.getTotalPrice()}</strong>
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <div class="col-md-6">
-                                        <span class="text-black">Total</span>
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <strong class="text-black">$${cart.getTotalPrice()}</strong>
-                                    </div>
-                                </div>
-
-                                <c:if test="${sessionScope.account.accountType eq 'user'}">
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <button class="btn btn-primary btn-block" onclick="window.location = 'reservation.jsp'">Proceed To Checkout</button>
-                                            <!--                                                <a class="btn btn-primary btn-block" href="" >Proceed To Checkout</a>-->
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${sessionScope.account.accountType eq null}">
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <button class="btn btn-primary btn-block" onclick="window.location = 'http://localhost:9999/ISP392-3/login'">Proceed To Checkout</button>
-                                        </div>
-                                    </div>
-                                </c:if>
-
-
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -190,13 +189,61 @@
 
 
     </body>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+                                                            $(document).ready(function () {
+                                                                var table = $('#dishTable').DataTable({
+                                                                    "paging": true,
+                                                                    "pageLength": 5,
+                                                                    "lengthChange": false,
+                                                                    "searching": true,
+                                                                    "ordering": false,
+                                                                    "info": false,
+                                                                    "columnDefs": [
+                                                                        {
+                                                                            "targets": 1, // Change this to the column index you want to search
+                                                                            "searchable": true
+                                                                        },
+                                                                        {
+                                                                            "targets": '_all',
+                                                                            "searchable": false
+                                                                        }
+                                                                    ]
+                                                                });
+
+                                                                // Only search the second column (index 1) when using the search input
+                                                                $('#dishTable_filter input').on('keyup', function () {
+                                                                    table
+                                                                            .columns(1) // Change this to the column index you want to search
+                                                                            .search(this.value)
+                                                                            .draw();
+                                                                });
+                                                            });
+    </script>
+
 </html>
 <script>
-    function updateCart(dishID, action, num) {
-        document.getElementById("dishID").value = dishID;
-        document.getElementById("action").value = action;
-        document.getElementById("num").value = num;
-        document.getElementById("cartForm").submit();
+    function updateCart(dishID, num) {
+        let element = document.getElementById("quantity_" + dishID);
+        let value = parseInt(element.value) + num; // Parse the value to an integer before adding
+        element.value = Math.max(value, 0); // Ensure the value is non-negative
+
+        value = element.value;
+
+        let price = document.getElementById("price_" + dishID).textContent.replace('€', '');
+        price = parseFloat(price);
+
+        document.getElementById("total_" + dishID).textContent = (price * value).toFixed(2);
+
     }
+
 </script>
 

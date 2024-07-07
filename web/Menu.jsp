@@ -99,9 +99,9 @@
                                                                 </div>
                                                             </div>
                                                             <p>${dish.getDescription()}</p>
-                                                            <div style="margin-left: 145px">
+<!--                                                            <div style="margin-left: 145px">
                                                                 <button type="button" class="btn alert-dark" onclick="addToCart(${dish.getDishID()})">Add to cart</button>
-                                                            </div>
+                                                            </div>-->
                                                         </div>
                                                     </div>
                                                 </div>
