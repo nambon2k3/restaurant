@@ -124,8 +124,8 @@ public class cartControllers extends HttpServlet {
 
             String dishOrder = "";
             for (int i = 0; i < dishIds.length; i++) {
-                dishOrder += dishIds[i] + ":" + quantities[i];
                 dishOrder += i==0 ? "" : ";";
+                dishOrder += dishIds[i] + ":" + quantities[i];
             }
             preOrder.setDishOrder(dishOrder);
 

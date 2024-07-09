@@ -134,7 +134,7 @@
                                                     <div class="input-group-prepend">
                                                         <button class="btn btn-outline-black decrease" type="button" onclick="updateCart(${item.dishID}, -1)">&minus;</button>
                                                     </div>
-                                                    <input type="hidden" value="(${item.dishID}" name="dishId">
+                                                    <input type="hidden" value="${item.dishID}" name="dishId">
                                                     <input type="number" class="form-control text-center quantity-amount" name="quantity" id="quantity_${item.dishID}" value="0" placeholder="" aria-label="Quantity" aria-describedby="button-addon1" readonly>
                                                     <div class="input-group-append">
                                                         <button class="btn btn-outline-black increase" type="button" onclick="updateCart(${item.dishID}, 1)">&plus;</button>
