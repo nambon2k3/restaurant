@@ -1,7 +1,10 @@
 package Model;
 
+import DAL.DishDao;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class PreOrder {
 
@@ -14,6 +17,7 @@ public class PreOrder {
     private Date time;
     private String status;
     private int userId;
+    private String dishOrder;
 
     // Constructors
     public PreOrder() {
@@ -47,7 +51,7 @@ public class PreOrder {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
+
     public int getPreOrderID() {
         return preOrderID;
     }
@@ -114,6 +118,40 @@ public class PreOrder {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDishOrder() {
+        return dishOrder;
+    }
+
+    public void setDishOrder(String dishOrder) {
+        this.dishOrder = dishOrder;
+    }
+
+    private List<PreOrderDetail> detail = null;
+
+    public List<PreOrderDetail> getDetail() {
+
+        if (detail == null) {
+            detail = new ArrayList<PreOrderDetail>();
+            
+            if (dishOrder==null || dishOrder.isEmpty()) 
+                return detail;
+
+            String[] datas = dishOrder.split(";");
+            for (String data : datas) {
+
+                String[] value = data.split(":");
+
+                PreOrderDetail preOrderDetail = new PreOrderDetail();
+                preOrderDetail.setDish(new DishDao().getDishesByID1(Integer.parseInt(value[0])));
+                preOrderDetail.setQuantity(Integer.parseInt(value[1]));
+
+                detail.add(preOrderDetail);
+            }
+        }
+
+        return detail;
     }
 
 }

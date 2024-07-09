@@ -109,7 +109,7 @@
                                         <option value="x">${preOrder.status}</option>
                                     </select>                        -->
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                <button type="submit" class="btn btn-primary btn-block ${preOrder.status eq 'Processing' ? '' : 'd-none'}">Update</button>
                             </form>
                         </div>
                     </div>

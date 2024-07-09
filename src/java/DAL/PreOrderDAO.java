@@ -113,7 +113,7 @@ public class PreOrderDAO extends DBConnect {
                         rs.getString("Status")
                 );
                 preOrder.setUserId(rs.getInt("userid"));
-
+                preOrder.setDishOrder(rs.getString("dishOrder"));
                 return preOrder;
             }
         } catch (SQLException ex) {
@@ -153,6 +153,7 @@ public class PreOrderDAO extends DBConnect {
                 preOrder.setTime(resultSet.getTime("Time"));
                 preOrder.setStatus(resultSet.getString("Status"));
                 preOrder.setUserId(resultSet.getInt("userid"));
+                preOrder.setDishOrder(resultSet.getString("dishOrder"));
                 preOrders.add(preOrder);
             }
         } catch (SQLException ex) {
@@ -178,6 +179,7 @@ public class PreOrderDAO extends DBConnect {
                 preOrder.setTime(resultSet.getTime("Time"));
                 preOrder.setStatus(resultSet.getString("Status"));
                 preOrder.setUserId(resultSet.getInt("userid"));
+                preOrder.setDishOrder(resultSet.getString("dishOrder"));
                 preOrders.add(preOrder);
             }
         } catch (SQLException ex) {
@@ -188,7 +190,7 @@ public class PreOrderDAO extends DBConnect {
 
     // Create a new pre-order and return the generated ID
     public int createPreOrder(PreOrder preOrder) {
-        String query = "INSERT INTO preordertable (Name, Phone, Book_date, Time, NumberOfPeople, Status, userid) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO preordertable (Name, Phone, Book_date, Time, NumberOfPeople, Status, userid, dishOrder) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = cnn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, preOrder.getName());
             statement.setString(2, preOrder.getPhone());
@@ -197,6 +199,7 @@ public class PreOrderDAO extends DBConnect {
             statement.setInt(5, preOrder.getNumberOfPeople());
             statement.setString(6, preOrder.getStatus());
             statement.setInt(7, preOrder.getUserId());
+            statement.setString(8, preOrder.getDishOrder());
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows > 0) {
@@ -229,6 +232,7 @@ public class PreOrderDAO extends DBConnect {
                 preOrder.setTime(resultSet.getTime("Time"));
                 preOrder.setStatus(resultSet.getString("Status"));
                 preOrder.setUserId(resultSet.getInt("userid"));
+                preOrder.setDishOrder(resultSet.getString("dishOrder"));
                 preOrders.add(preOrder);
             }
         } catch (SQLException ex) {

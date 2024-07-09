@@ -77,6 +77,9 @@
                                                 <c:if test="${preOrder.status eq 'Wait for deposit'}">
                                                     <a class="btn btn-secondary" href="payment?preOrderID=${preOrder.preOrderID}">Deposit</a>
                                                 </c:if>
+                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#detailsModal${preOrder.preOrderID}">
+                                                    Details
+                                                </button>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -90,6 +93,61 @@
                 </div>
             </div>
         </section>
+
+        <c:forEach items="${requestScope.list}" var="preOrder">
+            <!-- Modal -->
+            <div class="modal fade" id="detailsModal${preOrder.preOrderID}" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel${preOrder.preOrderID}" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel${preOrder.preOrderID}">Reservation Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>ID:</strong> ${preOrder.preOrderID}</p>
+                            <p><strong>Name:</strong> ${preOrder.name}</p>
+                            <p><strong>Phone:</strong> ${preOrder.phone}</p>
+                            <p><strong>Number of People:</strong> ${preOrder.numberOfPeople}</p>
+                            <p><strong>Book Date:</strong> ${preOrder.bookDate}</p>
+                            <p><strong>Time:</strong> ${preOrder.time}</p>
+                            <p><strong>Status:</strong> ${preOrder.status}</p>
+                        </div>
+
+                        <!-- Table to display preorder details -->
+                        <c:if test="${preOrder.detail.size() > 0}">
+                            <h5 class="mt-4">Dish Order Details</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Dish Name</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${preOrder.detail}" var="detail">
+                                        <tr>
+                                            <td><img src="images/${detail.dish.image}" alt="Image" class="img-fluid" style="width: 100px; height: auto;"></td>
+                                            <td>${detail.dish.name}</td>
+                                            <td>${detail.quantity}</td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:if>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
         <%@include file="close.jsp" %>
     </body>

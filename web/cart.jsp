@@ -155,7 +155,7 @@
                             <div  class="col-7">
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="${sessionScope.user.name}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="bookDate">Book Date</label>
@@ -167,7 +167,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="phone">Phone</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" value="${sessionScope.user.phone}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="numberOfPeople">Number of People</label>
@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" value="${sessionScope.user.email}">
                                 </div>
                                 <div class="form-group text-center">
                                     <button class="btn btn-primary btn-block w-25">Book</button>

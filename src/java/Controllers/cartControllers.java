@@ -84,7 +84,7 @@ public class cartControllers extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            
+
             Account user = (Account) request.getSession().getAttribute("account");
 
             // Retrieve form parameters
@@ -94,6 +94,9 @@ public class cartControllers extends HttpServlet {
             String phone = request.getParameter("phone");
             String numberOfPeopleStr = request.getParameter("numberOfPeople");
             String email = request.getParameter("email");
+
+            String[] dishIds = request.getParameterValues("dishId");
+            String[] quantities = request.getParameterValues("quantity");
 
             // Date and Time formatters
             SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -118,11 +121,18 @@ public class cartControllers extends HttpServlet {
             preOrder.setTime(bookTime);
             preOrder.setStatus("Processing");
             preOrder.setUserId(Integer.parseInt(user.getAccountID()));
-            
-            new PreOrderDAO().createPreOrder(preOrder);
 
-            response.sendRedirect("cart?success");
+            String dishOrder = "";
+            for (int i = 0; i < dishIds.length; i++) {
+                dishOrder += dishIds[i] + ":" + quantities[i];
+                dishOrder += i==0 ? "" : ";";
+            }
+            preOrder.setDishOrder(dishOrder);
+
+            new PreOrderDAO().createPreOrder(preOrder);
             
+            response.sendRedirect("cart?success");
+
         } catch (Exception e) {
 
             System.out.println(e);
