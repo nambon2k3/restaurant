@@ -140,7 +140,7 @@ public class PreOrderDAO extends DBConnect {
     
     public boolean updateStatusPreOrder(int preOrderID, String status, int tableId) {
 
-        String query = "UPDATE preordertable SET Status = ? AND TableID = ? WHERE PreOrderID = ?";
+        String query = "UPDATE preordertable SET Status = ?, TableID = ? WHERE PreOrderID = ?";
         boolean rowUpdated = false;
 
         try (PreparedStatement statement = cnn.prepareStatement(query)) {
