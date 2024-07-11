@@ -137,6 +137,22 @@ public class PreOrderDAO extends DBConnect {
         }
         return rowUpdated;
     }
+    
+    public boolean updateStatusPreOrder(int preOrderID, String status, int tableId) {
+
+        String query = "UPDATE preordertable SET Status = ? AND TableID = ? WHERE PreOrderID = ?";
+        boolean rowUpdated = false;
+
+        try (PreparedStatement statement = cnn.prepareStatement(query)) {
+            statement.setString(1, status);
+            statement.setInt(2, tableId);
+            statement.setInt(3, preOrderID);
+            rowUpdated = statement.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rowUpdated;
+    }
 
     public List<PreOrder> getAllPreOrders() {
         List<PreOrder> preOrders = new ArrayList<>();
