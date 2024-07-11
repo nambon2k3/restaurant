@@ -73,12 +73,13 @@ public class ReservationManager extends HttpServlet {
             throws ServletException, IOException {
         String preOrderIDStr = request.getParameter("preOrderID");
         String status = request.getParameter("status");
+        int tableID = Integer.parseInt(request.getParameter("tableID"));
 
         try {
             int preOrderID = Integer.parseInt(preOrderIDStr);
 
             PreOrderDAO dao = new PreOrderDAO();
-            boolean updated = dao.updateStatusPreOrder(preOrderID, status);
+            boolean updated = dao.updateStatusPreOrder(preOrderID, status, tableID);
 
             if (updated) {
                 response.sendRedirect("ManagerProcessing?success=Status updated successfully");
