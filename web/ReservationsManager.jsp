@@ -80,7 +80,7 @@
                                         <label for="tableID" style="font-weight: bold">Table ID</label>
                                         <select class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID">
                                             <c:forEach var="t" items="${tables}">
-                                                <option value="${t.tableID}">${t.tableNumber} - ${t.seats} seats</option>
+                                                <option value="${t.tableID}" ${t.tableID == preOrder.tableID ? 'selected' : ''}>${t.tableNumber} - ${t.seats} seats</option>
                                             </c:forEach>
                                         </select>
                                         <!--<input type="number" class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID">-->
