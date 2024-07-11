@@ -78,11 +78,16 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="tableID" style="font-weight: bold">Table ID</label>
-                                        <input type="number" class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID" readonly>
+                                        <select class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID">
+                                            <c:forEach var="t" items="${tables}">
+                                                <option value="${t.tableID}">${t.tableNumber} - ${t.seats} seats</option>
+                                            </c:forEach>
+                                        </select>
+                                        <!--<input type="number" class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID">-->
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="bookDate" style="font-weight: bold">Book Date</label>
-                                        <input type="datetime-local" class="form-control" id="bookDate" placeholder="Book Date" value="${preOrder.bookDate}" name="book_date" readonly>
+                                        <input type="text" class="form-control" id="bookDate" placeholder="Book Date" value="${preOrder.bookDate}" name="book_date" readonly>
                                     </div>
                                 </div>
                                 <div class="form-row">

@@ -1,6 +1,7 @@
 package ControllerDashbroad;
 
 import DAL.PreOrderDAO;
+import DAL.TableDAO;
 import Model.Account;
 import Model.PreOrder;
 import java.io.IOException;
@@ -57,8 +58,10 @@ public class ReservationManager extends HttpServlet {
                     int id = Integer.parseInt(id_raw);
                     PreOrder preOrder = dao.getPreOrderById(id);
                     request.setAttribute("preOrder", preOrder);
+                    request.setAttribute("tables", new TableDAO().getAll());
                     request.getRequestDispatcher("ReservationsManager.jsp").forward(request, response);
                 } catch (Exception e) {
+                    System.out.println(e);
                     response.sendRedirect("errorPage.jsp");
                 }
             }
