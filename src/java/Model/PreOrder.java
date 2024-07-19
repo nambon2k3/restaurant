@@ -1,6 +1,8 @@
 package Model;
 
 import DAL.DishDao;
+import DAL.TableDAO;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -126,6 +128,9 @@ public class PreOrder {
 
     public void setDishOrder(String dishOrder) {
         this.dishOrder = dishOrder;
+    }
+    public Table getTable() throws SQLException {
+        return new TableDAO().getById(tableID);
     }
 
     private List<PreOrderDetail> detail = null;

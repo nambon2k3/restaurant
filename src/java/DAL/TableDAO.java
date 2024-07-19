@@ -31,4 +31,21 @@ public class TableDAO extends DBConnect {
         return list;
     }
     
+    public Table getById(int id) throws SQLException {
+        String query = "SELECT * FROM restauranttable WHERE TableID = " + id;
+        try (PreparedStatement statement = cnn.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                
+                Table table = new Table();
+                table.setTableID(resultSet.getInt("TableID"));
+                table.setTableNumber(resultSet.getInt("TableNumber"));
+                table.setSeats(resultSet.getInt("Seats"));
+                table.setStatus(resultSet.getString("Status"));
+                
+                return table;
+            }
+        }
+        return null;
+    }
+    
 }

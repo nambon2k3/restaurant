@@ -78,7 +78,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="tableID" style="font-weight: bold">Table ID</label>
-                                        <select class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID">
+                                        <select class="form-control" id="tableID" placeholder="Table ID" value="${preOrder.tableID}" name="tableID"${preOrder.status eq 'Processing' ? '' : 'readonly'}>
                                             <c:forEach var="t" items="${tables}">
                                                 <option value="${t.tableID}" ${t.tableID == preOrder.tableID ? 'selected' : ''}>${t.tableNumber} - ${t.seats} seats</option>
                                             </c:forEach>

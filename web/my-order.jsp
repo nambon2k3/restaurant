@@ -50,6 +50,7 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>ID</th>
+                                        <th>Table</th>
                                         <th>Name</th>
                                         <th>Phone</th>
                                         <th>Number of People</th>
@@ -63,6 +64,7 @@
                                     <c:forEach items="${requestScope.list}" var="preOrder">
                                         <tr>
                                             <td>${preOrder.preOrderID}</td>
+                                            <td>${preOrder.table.tableNumber}</td>
                                             <td>${preOrder.name}</td>
                                             <td>${preOrder.phone}</td>
                                             <td>${preOrder.numberOfPeople}</td>
