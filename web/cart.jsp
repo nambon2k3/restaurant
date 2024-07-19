@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="numberOfPeople">Number of People</label>
-                                    <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" placeholder="Enter number of people"  required min="1" required>
+                                    <input type="number" class="form-control" id="numberOfPeople" name="numberOfPeople" placeholder="Enter number of people"  required min="1" max="15" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>

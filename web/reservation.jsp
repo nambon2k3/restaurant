@@ -145,7 +145,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="number_of_people">Number of People</label>
-                                            <input type="number" id="number_of_people" name="number_of_people" class="form-control" value="1" min="1" max="20" required>
+                                            <input type="number" id="number_of_people" name="number_of_people" class="form-control" value="1" min="1" max="15" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
