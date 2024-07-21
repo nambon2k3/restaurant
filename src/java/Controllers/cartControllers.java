@@ -94,6 +94,7 @@ public class cartControllers extends HttpServlet {
             String phone = request.getParameter("phone");
             String numberOfPeopleStr = request.getParameter("numberOfPeople");
             String email = request.getParameter("email");
+            String dishOrder = request.getParameter("dishOrder");
 
             String[] dishIds = request.getParameterValues("dishId");
             String[] quantities = request.getParameterValues("quantity");
@@ -122,15 +123,20 @@ public class cartControllers extends HttpServlet {
             preOrder.setStatus("Processing");
             preOrder.setUserId(Integer.parseInt(user.getAccountID()));
 
-            String dishOrder = "";
-            for (int i = 0; i < dishIds.length; i++) {
-                dishOrder += i==0 ? "" : ";";
-                dishOrder += dishIds[i] + ":" + quantities[i];
-            }
+//            String dishOrder = "";
+//            for (int i = 0; i < dishIds.length; i++) {
+//                System.out.println(dishIds[i] + ":" + quantities[i]);
+//                if (!quantities[i].equals("0")) {
+//                    dishOrder += dishIds[i] + ":" + quantities[i];
+//                    dishOrder += ";";
+//                }
+//            }
+//            dishOrder = dishOrder.substring(0, dishOrder.length());
+            System.out.println(dishOrder);
             preOrder.setDishOrder(dishOrder);
 
             new PreOrderDAO().createPreOrder(preOrder);
-            
+
             response.sendRedirect("cart?success");
 
         } catch (Exception e) {

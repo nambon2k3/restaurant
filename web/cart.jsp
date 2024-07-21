@@ -56,17 +56,71 @@
         <link rel="stylesheet" href="css/style.css">
 
         <script>
-            // Function to set min attribute to today's date
-            function setMinDate() {
-                // Get today's date in yyyy-mm-dd format
-                let today = new Date().toISOString().split('T')[0];
-
-                // Set min attribute of bookDate input field
-                document.getElementById('bookDate').min = today;
+            function formatTime(hours, minutes) {
+                // Ensure hours and minutes are always two digits
+                if (hours < 10)
+                    hours = '0' + hours;
+                if (minutes < 10)
+                    minutes = '0' + minutes;
+                return hours + ':' + minutes;
             }
 
-            // Call setMinDate function when the page loads
-            window.onload = setMinDate;
+            function updateDateRestrictions() {
+                let now = new Date();
+                let todayDate = now.toISOString().split('T')[0];
+
+                // Set min attribute of bookDate input field to today's date
+                let dateInput = document.getElementById('bookDate');
+                dateInput.setAttribute('min', todayDate);
+            }
+
+            function updateTimeRestrictions() {
+                let now = new Date();
+                let todayDate = now.toISOString().split('T')[0];
+                let hours = now.getHours();
+                let minutes = now.getMinutes();
+                let minTime = formatTime(hours, minutes);
+
+                let dateInput = document.getElementById('bookDate');
+                let timeInput = document.getElementById('bookTime');
+
+                if (dateInput.value === todayDate) {
+                    // Set min attribute of bookTime input field to current time if today is selected
+                    timeInput.setAttribute('min', minTime);
+                } else {
+                    // No restriction for future dates
+                    timeInput.removeAttribute('min');
+                }
+            }
+
+            function validateTime() {
+                let dateInput = document.getElementById('bookDate');
+                let timeInput = document.getElementById('bookTime');
+
+                if (dateInput.value === todayDate) {
+                    let now = new Date();
+                    let selectedTime = timeInput.value;
+                    let hours = now.getHours();
+                    let minutes = now.getMinutes();
+                    let minTime = formatTime(hours, minutes);
+
+                    if (selectedTime < minTime) {
+                        alert('The selected time is before the current time. Please choose a later time.');
+                        timeInput.value = ''; // Clear the invalid time
+                    }
+                }
+            }
+
+            window.onload = function () {
+                updateDateRestrictions();
+
+                document.getElementById('bookDate').addEventListener('change', function () {
+                    updateTimeRestrictions();
+                    validateTime();
+                });
+
+                document.getElementById('bookTime').addEventListener('change', validateTime);
+            };
         </script>
     </head>
 
@@ -107,7 +161,7 @@
                 </c:if>
 
                 <div class="row mb-5">
-                    <form class="col-md-12" action="cart" method="post">
+                    <form class="col-md-12"id="cartForm" action="cart" method="post">
                         <div class="site-blocks-table">
                             <table class="table table-borderless" id="dishTable">
                                 <thead>
@@ -152,6 +206,7 @@
                         </div>
 
                         <div class="row mt-5">
+                            <input type="hidden" id="dishOrder" name="dishOrder" value="">
                             <div  class="col-7">
                                 <div class="form-group">
                                     <label for="name">Name</label>
@@ -211,6 +266,41 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
+// Initialize a global Map to keep track of dish quantities
+                                                            let dishOrderMap = new Map();
+
+                                                            // Function to update the dishOrderMap and hidden input
+                                                            function updateDishOrder(dishID, quantity) {
+                                                                if (quantity > 0) {
+                                                                    dishOrderMap.set(dishID, quantity);
+                                                                } else {
+                                                                    dishOrderMap.delete(dishID);
+                                                                }
+
+                                                                // Convert the Map to a string
+                                                                let dishOrderString = "";
+                                                                dishOrderMap.forEach((qty, id) => {
+                                                                    dishOrderString += id + ":" + qty + ";";
+                                                                });
+
+                                                                // Remove trailing semicolon if exists
+                                                                if (dishOrderString.endsWith(';')) {
+                                                                    dishOrderString = dishOrderString.slice(0, -1);
+                                                                }
+
+                                                                // Update the hidden field
+                                                                let hiddenInput = document.getElementById("dishOrder");
+                                                                if (!hiddenInput) {
+                                                                    hiddenInput = document.createElement("input");
+                                                                    hiddenInput.type = "hidden";
+                                                                    hiddenInput.id = "dishOrder";
+                                                                    hiddenInput.name = "dishOrder";
+                                                                    document.getElementById("cartForm").appendChild(hiddenInput);
+                                                                }
+                                                                hiddenInput.value = dishOrderString;
+//                                                                alert(dishOrderString)
+                                                            }
+
                                                             $(document).ready(function () {
                                                                 var table = $('#dishTable').DataTable({
                                                                     "paging": true,
@@ -241,21 +331,25 @@
                                                             });
     </script>
 
+    <script>
+        function updateCart(dishID, num) {
+            let element = document.getElementById("quantity_" + dishID);
+            let value = parseInt(element.value) + num; // Parse the value to an integer before adding
+            element.value = Math.max(value, 0); // Ensure the value is non-negative
+
+            value = element.value;
+
+            let price = document.getElementById("price_" + dishID).textContent.replace('€', '');
+            price = parseFloat(price);
+
+            document.getElementById("total_" + dishID).textContent = (price * value).toFixed(2);
+
+            // Update dishOrder string and hidden input
+            updateDishOrder(dishID, value);
+        }
+
+    </script>
+
 </html>
-<script>
-    function updateCart(dishID, num) {
-        let element = document.getElementById("quantity_" + dishID);
-        let value = parseInt(element.value) + num; // Parse the value to an integer before adding
-        element.value = Math.max(value, 0); // Ensure the value is non-negative
 
-        value = element.value;
-
-        let price = document.getElementById("price_" + dishID).textContent.replace('€', '');
-        price = parseFloat(price);
-
-        document.getElementById("total_" + dishID).textContent = (price * value).toFixed(2);
-
-    }
-
-</script>
 
